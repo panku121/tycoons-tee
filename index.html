@@ -31,7 +31,7 @@
           </div>
           <p class="eyebrow">Play. Fight. Win.</p>
           <h1>The Tycoon's</h1>
-          <p class="tagline">Please enter your t-shirt size, jersey number, name, and trouser size</p>
+          <p class="tagline">Please enter your t-shirt size, sleeve length, jersey number, name, and trouser size</p>
         </header>
 
         <div class="layout">
@@ -106,6 +106,54 @@
               </div>
               <input type="hidden" id="size" name="size" value="" required />
               <span class="error" data-error-for="size"></span>
+            </div>
+
+            <div class="field">
+              <span class="field-label" id="sleeveLengthLabel">Sleeve Length</span>
+              <div class="size-grid sleeve-grid" role="radiogroup" aria-labelledby="sleeveLengthLabel">
+                <label class="size-card sleeve-card">
+                  <input type="radio" name="sleeveLengthOption" value="Half Sleeve" />
+                  <span class="sleeve-icon" aria-hidden="true">
+                    <svg viewBox="0 0 48 48" fill="none">
+                      <path
+                        d="M16 9.5 21 15h6l5-5.5 9.5 6.5-4 7.5H34V39H14V22.5h-3.5l-4-7.5L16 9.5Z"
+                        stroke="currentColor"
+                        stroke-width="2.2"
+                        stroke-linejoin="round"
+                      />
+                      <path
+                        d="M21 15c1.8 3 4.2 3 6 0"
+                        stroke="currentColor"
+                        stroke-width="2.2"
+                        stroke-linecap="round"
+                      />
+                    </svg>
+                  </span>
+                  <span class="size-chest sleeve-choice">Half Sleeve</span>
+                </label>
+                <label class="size-card sleeve-card">
+                  <input type="radio" name="sleeveLengthOption" value="Full Sleeve" />
+                  <span class="sleeve-icon" aria-hidden="true">
+                    <svg viewBox="0 0 48 48" fill="none">
+                      <path
+                        d="M16 9.5 21 15h6l5-5.5 11 8-4.5 21.5H34.5L34 23v16H14V23l-.5 20.5H9.5L5 17.5l11-8Z"
+                        stroke="currentColor"
+                        stroke-width="2.2"
+                        stroke-linejoin="round"
+                      />
+                      <path
+                        d="M21 15c1.8 3 4.2 3 6 0"
+                        stroke="currentColor"
+                        stroke-width="2.2"
+                        stroke-linecap="round"
+                      />
+                    </svg>
+                  </span>
+                  <span class="size-chest sleeve-choice">Full Sleeve</span>
+                </label>
+              </div>
+              <input type="hidden" id="sleeveLength" name="sleeveLength" value="" required />
+              <span class="error" data-error-for="sleeveLength"></span>
             </div>
 
             <div class="field-row">

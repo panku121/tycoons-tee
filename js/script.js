@@ -6,11 +6,13 @@ const popup = document.getElementById("successPopup");
 const popupClose = document.getElementById("popupClose");
 const previewNumber = document.getElementById("previewNumber");
 const previewName = document.getElementById("previewName");
+const jerseyPreview = document.getElementById("jerseyPreview");
 
 const fields = {
   fullName: document.getElementById("fullName"),
   phone: document.getElementById("phone"),
   size: document.getElementById("size"),
+  sleeveLength: document.getElementById("sleeveLength"),
   lowerSize: document.getElementById("lowerSize"),
   backNumber: document.getElementById("backNumber"),
   backName: document.getElementById("backName"),
@@ -61,6 +63,7 @@ function validateForm() {
     fullName: validateName(fields.fullName.value),
     phone: validatePhone(fields.phone.value),
     size: validateSelect(fields.size.value, "t-shirt size"),
+    sleeveLength: validateSelect(fields.sleeveLength.value, "sleeve length"),
     lowerSize: validateSelect(fields.lowerSize.value, "trouser size"),
     backNumber: validateBackNumber(fields.backNumber.value),
     backName: validateBackName(fields.backName.value),
@@ -93,15 +96,16 @@ function setLoading(isLoading) {
 
 function getFormPayload() {
   syncSelectedSize();
+  syncSelectedSleeveLength();
   syncSelectedLowerSize();
   return {
     fullName: fields.fullName.value.trim(),
     phone: fields.phone.value.trim(),
     size: fields.size.value,
+    sleeveLength: fields.sleeveLength.value,
     lowerSize: fields.lowerSize.value,
     backNumber: String(fields.backNumber.value),
     backName: fields.backName.value.trim().toUpperCase(),
-    paymentStatus: "Not Paid",
   };
 }
 
@@ -122,6 +126,7 @@ async function saveToGoogleSheet(payload) {
 }
 
 const sizeOptions = document.querySelectorAll('input[name="sizeOption"]');
+const sleeveLengthOptions = document.querySelectorAll('input[name="sleeveLengthOption"]');
 const lowerSizeOptions = document.querySelectorAll('input[name="lowerSizeOption"]');
 
 function syncSelectedSize() {
@@ -130,6 +135,15 @@ function syncSelectedSize() {
   sizeOptions.forEach((item) => {
     item.closest(".size-card").classList.toggle("is-selected", item.checked);
   });
+}
+
+function syncSelectedSleeveLength() {
+  const selected = document.querySelector('input[name="sleeveLengthOption"]:checked');
+  fields.sleeveLength.value = selected ? selected.value : "";
+  sleeveLengthOptions.forEach((item) => {
+    item.closest(".size-card").classList.toggle("is-selected", item.checked);
+  });
+  jerseyPreview.classList.toggle("is-full-sleeve", fields.sleeveLength.value === "Full Sleeve");
 }
 
 function syncSelectedLowerSize() {
@@ -144,6 +158,13 @@ sizeOptions.forEach((option) => {
   option.addEventListener("change", () => {
     syncSelectedSize();
     setError(fields.size, validateSelect(fields.size.value, "t-shirt size"));
+  });
+});
+
+sleeveLengthOptions.forEach((option) => {
+  option.addEventListener("change", () => {
+    syncSelectedSleeveLength();
+    setError(fields.sleeveLength, validateSelect(fields.sleeveLength.value, "sleeve length"));
   });
 });
 
@@ -173,6 +194,7 @@ Object.values(fields).forEach((input) => {
     if (input === fields.fullName) setError(input, validateName(input.value));
     if (input === fields.phone) setError(input, validatePhone(input.value));
     if (input === fields.size) setError(input, validateSelect(input.value, "t-shirt size"));
+    if (input === fields.sleeveLength) setError(input, validateSelect(input.value, "sleeve length"));
     if (input === fields.lowerSize) setError(input, validateSelect(input.value, "trouser size"));
     if (input === fields.backNumber) setError(input, validateBackNumber(input.value));
     if (input === fields.backName) setError(input, validateBackName(input.value));
@@ -182,6 +204,7 @@ Object.values(fields).forEach((input) => {
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
   syncSelectedSize();
+  syncSelectedSleeveLength();
   syncSelectedLowerSize();
   if (!validateForm()) return;
 
@@ -190,6 +213,7 @@ form.addEventListener("submit", async (event) => {
     await saveToGoogleSheet(getFormPayload());
     form.reset();
     syncSelectedSize();
+    syncSelectedSleeveLength();
     syncSelectedLowerSize();
     updatePreview();
     showPopup();

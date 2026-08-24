@@ -20,17 +20,15 @@
  */
 
 var SHEET_NAME = "tycoons";
-var BACK_NUMBER_COL = 5;
-var DEFAULT_PAYMENT_STATUS = "Not Paid";
 var HEADERS = [
   "Timestamp",
   "Full Name",
   "Phone Number",
   "T-Shirt Size",
+  "Sleeve Length",
   "Jersey Number",
   "Jersey Name",
-  "Trouser Size",
-  "Payment Status"
+  "Trouser Size"
 ];
 
 function doGet(e) {
@@ -48,7 +46,6 @@ function handleRequest(e) {
   try {
     var sheet = getOrCreateSheet();
     ensureHeaders(sheet);
-    backfillPaymentStatus(sheet);
 
     var data = getRequestData(e);
     if (!data.fullName && !data.phone) {
@@ -74,6 +71,9 @@ function getOrCreateSheet() {
 }
 
 function ensureHeaders(sheet) {
+  migrateSleeveLengthColumn(sheet);
+  migrateRemovePaymentStatusColumn(sheet);
+
   var firstRow = sheet.getRange(1, 1, 1, HEADERS.length).getValues()[0];
   var headerMismatch = HEADERS.some(function (header, index) {
     return String(firstRow[index] || "").trim() !== header;
@@ -83,28 +83,67 @@ function ensureHeaders(sheet) {
     sheet.getRange(1, 1, 1, HEADERS.length).setFontWeight("bold");
     sheet.setFrozenRows(1);
   }
-  sheet.getRange(2, BACK_NUMBER_COL, sheet.getMaxRows() - 1, 1).setNumberFormat("@");
+  var backNumberCol = columnForHeader(sheet, "Jersey Number");
+  if (backNumberCol > 0) {
+    sheet.getRange(2, backNumberCol, sheet.getMaxRows() - 1, 1).setNumberFormat("@");
+  }
+}
+
+function migrateSleeveLengthColumn(sheet) {
+  var lastColumn = Math.max(sheet.getLastColumn(), 1);
+  var headers = sheet.getRange(1, 1, 1, lastColumn).getValues()[0];
+  var hasSleeve = headers.some(function (header) {
+    return String(header || "").trim() === "Sleeve Length";
+  });
+  if (hasSleeve) return;
+
+  var sizeCol = -1;
+  for (var i = 0; i < headers.length; i++) {
+    if (String(headers[i] || "").trim() === "T-Shirt Size") {
+      sizeCol = i + 1;
+      break;
+    }
+  }
+  if (sizeCol > 0) {
+    sheet.insertColumnAfter(sizeCol);
+    sheet.getRange(1, sizeCol + 1).setValue("Sleeve Length").setFontWeight("bold");
+  }
+}
+
+function migrateRemovePaymentStatusColumn(sheet) {
+  var lastColumn = Math.max(sheet.getLastColumn(), 1);
+  var headers = sheet.getRange(1, 1, 1, lastColumn).getValues()[0];
+  for (var i = 0; i < headers.length; i++) {
+    if (String(headers[i] || "").trim() === "Payment Status") {
+      sheet.deleteColumn(i + 1);
+      return;
+    }
+  }
 }
 
 function writeOrderRow(sheet, data) {
   var nextRow = Math.max(sheet.getLastRow() + 1, 2);
   var backNumber = String(data.backNumber || "");
   var lowerSize = data.lowerSize || "";
+  var sleeveLength = data.sleeveLength || "";
+  var backNumberCol = columnForHeader(sheet, "Jersey Number");
   var rowValues = [
     new Date(),
     data.fullName || "",
     data.phone || "",
     data.size || "",
+    sleeveLength,
     backNumber,
     data.backName || "",
-    lowerSize,
-    DEFAULT_PAYMENT_STATUS
+    lowerSize
   ];
 
   sheet.getRange(nextRow, 1, 1, rowValues.length).setValues([rowValues]);
-  sheet.getRange(nextRow, BACK_NUMBER_COL).setNumberFormat("@").setValue(backNumber);
+  if (backNumberCol > 0) {
+    sheet.getRange(nextRow, backNumberCol).setNumberFormat("@").setValue(backNumber);
+  }
+  setCellByHeader(sheet, nextRow, "Sleeve Length", sleeveLength);
   setCellByHeader(sheet, nextRow, "Trouser Size", lowerSize);
-  setCellByHeader(sheet, nextRow, "Payment Status", DEFAULT_PAYMENT_STATUS);
 }
 
 function setCellByHeader(sheet, row, headerName, value) {
@@ -122,25 +161,6 @@ function setCellByHeader(sheet, row, headerName, value) {
   }
   if (col > 0) {
     sheet.getRange(row, col).setValue(value);
-  }
-}
-
-function backfillPaymentStatus(sheet) {
-  var lastRow = sheet.getLastRow();
-  var paymentCol = columnForHeader(sheet, "Payment Status");
-  if (lastRow < 2 || paymentCol < 1) return;
-
-  var range = sheet.getRange(2, paymentCol, lastRow - 1, 1);
-  var values = range.getValues();
-  var changed = false;
-  for (var i = 0; i < values.length; i++) {
-    if (!String(values[i][0] || "").trim()) {
-      values[i][0] = DEFAULT_PAYMENT_STATUS;
-      changed = true;
-    }
-  }
-  if (changed) {
-    range.setValues(values);
   }
 }
 
@@ -173,6 +193,7 @@ function getRequestData(e) {
     fullName: params.fullName || "",
     phone: params.phone || "",
     size: params.size || "",
+    sleeveLength: params.sleeveLength || "",
     backNumber: params.backNumber || "",
     backName: params.backName || "",
     lowerSize: params.lowerSize || ""
