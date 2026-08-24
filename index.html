@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0a0a0a" />
+    <title>The Tycoon's | Order Form</title>
+    <link rel="icon" href="assets/tycoonsLOGO_Green.png" type="image/png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Rajdhani:wght@500;600;700&family=Outfit:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="pitch-bg" aria-hidden="true"></div>
+    <div class="glow glow-left" aria-hidden="true"></div>
+    <div class="glow glow-right" aria-hidden="true"></div>
+
+    <main class="page">
+      <section class="form-card">
+        <header class="form-header">
+          <div class="logo-wrap">
+            <img
+              src="assets/tycoonsLOGO_Green.png"
+              alt="Tycoon's 11 logo"
+              class="club-logo"
+            />
+          </div>
+          <p class="eyebrow">Play. Fight. Win.</p>
+          <h1>The Tycoon's</h1>
+          <p class="tagline">Please enter your t-shirt size, jersey number, name, and trouser size</p>
+        </header>
+
+        <div class="layout">
+          <form id="tshirtForm" class="order-form" novalidate>
+            <div class="field">
+              <label for="fullName">Name</label>
+              <input
+                type="text"
+                id="fullName"
+                name="fullName"
+                placeholder="e.g. Mansoor"
+                autocomplete="name"
+                maxlength="60"
+                required
+              />
+              <span class="error" data-error-for="fullName"></span>
+            </div>
+
+            <div class="field">
+              <label for="phone">Phone Number</label>
+              <input
+                type="tel"
+                id="phone"
+                name="phone"
+                inputmode="numeric"
+                placeholder="10-digit mobile number"
+                autocomplete="tel"
+                maxlength="10"
+                required
+              />
+              <span class="error" data-error-for="phone"></span>
+            </div>
+
+            <div class="field">
+              <span class="field-label" id="sizeLabel">T-Shirt Size</span>
+              <div class="size-grid" role="radiogroup" aria-labelledby="sizeLabel">
+                <label class="size-card">
+                  <input type="radio" name="sizeOption" value="36/S" />
+                  <span class="size-chest">36</span>
+                  <span class="size-code">S</span>
+                </label>
+                <label class="size-card">
+                  <input type="radio" name="sizeOption" value="38/M" />
+                  <span class="size-chest">38</span>
+                  <span class="size-code">M</span>
+                </label>
+                <label class="size-card">
+                  <input type="radio" name="sizeOption" value="40/L" />
+                  <span class="size-chest">40</span>
+                  <span class="size-code">L</span>
+                </label>
+                <label class="size-card">
+                  <input type="radio" name="sizeOption" value="42/XL" />
+                  <span class="size-chest">42</span>
+                  <span class="size-code">XL</span>
+                </label>
+                <label class="size-card">
+                  <input type="radio" name="sizeOption" value="44/XXL" />
+                  <span class="size-chest">44</span>
+                  <span class="size-code">XXL</span>
+                </label>
+                <label class="size-card">
+                  <input type="radio" name="sizeOption" value="46/3XL" />
+                  <span class="size-chest">46</span>
+                  <span class="size-code">3XL</span>
+                </label>
+                <label class="size-card">
+                  <input type="radio" name="sizeOption" value="48/4XL" />
+                  <span class="size-chest">48</span>
+                  <span class="size-code">4XL</span>
+                </label>
+              </div>
+              <input type="hidden" id="size" name="size" value="" required />
+              <span class="error" data-error-for="size"></span>
+            </div>
+
+            <div class="field-row">
+              <div class="field">
+                <label for="backNumber">Jersey Number</label>
+                <input
+                  type="text"
+                  id="backNumber"
+                  name="backNumber"
+                  placeholder="e.g. 10"
+                  inputmode="numeric"
+                  maxlength="3"
+                  required
+                />
+                <span class="error" data-error-for="backNumber"></span>
+              </div>
+
+              <div class="field">
+                <label for="backName">Name on Jersey</label>
+                <input
+                  type="text"
+                  id="backName"
+                  name="backName"
+                  placeholder="e.g. MANSOOR"
+                  maxlength="12"
+                  required
+                />
+                <span class="error" data-error-for="backName"></span>
+              </div>
+            </div>
+
+            <div class="field">
+              <span class="field-label" id="lowerSizeLabel">Trouser Size</span>
+              <div class="size-grid" role="radiogroup" aria-labelledby="lowerSizeLabel">
+                <label class="size-card">
+                  <input type="radio" name="lowerSizeOption" value="28/S" />
+                  <span class="size-chest">28</span>
+                  <span class="size-code">S</span>
+                </label>
+                <label class="size-card">
+                  <input type="radio" name="lowerSizeOption" value="30/M" />
+                  <span class="size-chest">30</span>
+                  <span class="size-code">M</span>
+                </label>
+                <label class="size-card">
+                  <input type="radio" name="lowerSizeOption" value="32/L" />
+                  <span class="size-chest">32</span>
+                  <span class="size-code">L</span>
+                </label>
+                <label class="size-card">
+                  <input type="radio" name="lowerSizeOption" value="34/XL" />
+                  <span class="size-chest">34</span>
+                  <span class="size-code">XL</span>
+                </label>
+                <label class="size-card">
+                  <input type="radio" name="lowerSizeOption" value="36/XXL" />
+                  <span class="size-chest">36</span>
+                  <span class="size-code">XXL</span>
+                </label>
+                <label class="size-card">
+                  <input type="radio" name="lowerSizeOption" value="38/3XL" />
+                  <span class="size-chest">38</span>
+                  <span class="size-code">3XL</span>
+                </label>
+                <label class="size-card">
+                  <input type="radio" name="lowerSizeOption" value="40/4XL" />
+                  <span class="size-chest">40</span>
+                  <span class="size-code">4XL</span>
+                </label>
+              </div>
+              <input type="hidden" id="lowerSize" name="lowerSize" value="" required />
+              <span class="error" data-error-for="lowerSize"></span>
+            </div>
+
+            <button type="submit" id="submitBtn" class="submit-btn">
+              <span class="btn-text">Submit Details</span>
+              <span class="btn-loader" aria-hidden="true"></span>
+            </button>
+          </form>
+
+          <aside class="jersey-preview" aria-hidden="true">
+            <p class="preview-label">Jersey Preview</p>
+            <div class="jersey" id="jerseyPreview">
+              <div class="jersey-body">
+                <span class="jersey-slash jersey-slash-a"></span>
+                <span class="jersey-slash jersey-slash-b"></span>
+                <span class="jersey-number" id="previewNumber">10</span>
+                <span class="jersey-name" id="previewName">NAME</span>
+                <span class="jersey-team">THE TYCOON'S</span>
+              </div>
+              <div class="jersey-sleeve jersey-sleeve-left"></div>
+              <div class="jersey-sleeve jersey-sleeve-right"></div>
+            </div>
+            <p class="preview-hint">Live preview of the name and number on the jersey</p>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <div id="successPopup" class="popup-overlay" role="dialog" aria-modal="true" aria-labelledby="popupTitle" hidden>
+      <div class="popup-card">
+        <div class="popup-icon">✓</div>
+        <h2 id="popupTitle">Thank You!</h2>
+        <p>Your details have been submitted successfully.</p>
+        <button type="button" id="popupClose" class="popup-btn">OK</button>
+      </div>
+    </div>
+
+    <script src="js/script.js"></script>
+  </body>
+</html>
